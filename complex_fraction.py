@@ -7,14 +7,8 @@ from numbers import Complex, Number, Real
 class ComplexFraction(Number):
 
     def __init__(self, *args):
-
-        if (len(args) == 0):
-
-            self.real: Fraction = Fraction(0)
-            
-            self.imag: Fraction = Fraction(0)
         
-        elif (len(args) == 1):
+        if (len(args) == 1):
 
             z: Complex = args[0]
 
@@ -34,37 +28,33 @@ class ComplexFraction(Number):
 
     def __repr__(self) -> str:
 
-        if (self.imag != 0):
-
-            return f"ComplexFraction({self.real}, {self.imag})"
-
-        else:
-            
-            return f"ComplexFraction({self.real})"
+            return f"ComplexFraction('{self.real}', '{self.imag}')"
     
     def __str__(self) -> str:
 
-        if (self == 0):
+        printable_num = self.limit_denominator()
+
+        if (printable_num == 0):
 
             return '0'
         
-        elif (self.real == 0):
+        elif (printable_num.real == 0):
 
-            return f"{self.imag}j"
+            return f"{printable_num.imag}*1j"
         
-        elif (self.imag == 0):
+        elif (printable_num.imag == 0):
 
-            return f"{self.real}"
+            return f"{printable_num.real}"
         
         else:
 
-            if (self.imag > 0):
+            if (printable_num.imag > 0):
 
-                return f"{self.real}+{self.imag}j"
+                return f"{printable_num.real}+{printable_num.imag}*1j"
             
             else:
 
-                return f"{self.real}-{-self.imag}j"
+                return f"{printable_num.real}-{-printable_num.imag}*1j"
             
     def __eq__(self, rhs: Number) -> bool:
 
@@ -107,8 +97,6 @@ class ComplexFraction(Number):
         if not isinstance(rhs, ComplexFraction):
 
             rhs = ComplexFraction(rhs)
-        
-        rhs = -rhs
 
         res_real = self.real - rhs.real
 
@@ -136,7 +124,7 @@ class ComplexFraction(Number):
 
         res_real = self.real*rhs.real - self.imag*rhs.imag
 
-        res_imag = self.real*rhs.imag + self.imag*rhs.imag
+        res_imag = self.real*rhs.imag + self.imag*rhs.real
 
         return ComplexFraction(res_real, res_imag)
     
@@ -148,7 +136,7 @@ class ComplexFraction(Number):
 
         res_real = self.real*lhs.real - self.imag*lhs.imag
 
-        res_imag = self.real*lhs.imag + self.imag*lhs.imag
+        res_imag = self.real*lhs.imag + self.imag*lhs.real
 
         return ComplexFraction(res_real, res_imag)
 
@@ -162,7 +150,7 @@ class ComplexFraction(Number):
     
     def magnitude_squared(self: ComplexFraction) -> Fraction:
 
-        return (self*self.conjugate()).real
+        return self.real**2 + self.imag**2
     
     def recip(self: ComplexFraction) -> ComplexFraction:
 
