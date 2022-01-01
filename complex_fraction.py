@@ -160,7 +160,7 @@ class ComplexFraction(Number):
     
     def __str__(self) -> str:
 
-        printable_num = self.limit_denominator()
+        printable_num: ComplexFraction = self.limit_denominator()
 
         if (printable_num == 0):
 
@@ -178,11 +178,11 @@ class ComplexFraction(Number):
 
             if (printable_num.imag > 0):
 
-                return f"{printable_num.real}+{printable_num.imag}*1j"
+                return f"{printable_num.real}+{printable_num.imag}j"
             
             else:
 
-                return f"{printable_num.real}-{-printable_num.imag}*1j"
+                return f"{printable_num.real}-{-printable_num.imag}j"
             
     def __eq__(self, rhs: Number) -> bool:
 
