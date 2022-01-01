@@ -5,7 +5,7 @@ from numbers import Complex, Number, Real
 from typing import Tuple, Union
 
 
-class ComplexFraction(Number):
+class ComplexFraction(Complex):
     """This class implements complex numbers with components being Fractions. 
 
     In the 1 argument constructor a complex number or a string of a complex number is acceptable.\n
