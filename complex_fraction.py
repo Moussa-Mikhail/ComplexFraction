@@ -10,9 +10,10 @@ class ComplexFraction(Number):
 
     In the 1 argument constructor a complex number or a string of a complex number is acceptable.\n
 
-    The 2 argument constructor accepts 2 real numbers, 2 strings, or a combination of the 2.\n
+    The 2 argument constructor accepts 2 real numbers, 2 strings, or a combination.\n
 
-    Note that 1/3j is interpreted by python as 1/(3j) == -0.333...j but is interpreted by the constructor as 1/3*1j
+    Note that 1/3j is interpreted by python as 1/(3j) == -0.333...j\n
+    but for the purposes of this class "1/3j" is equivalent to "(1/3)j."
 
 
     """
@@ -168,7 +169,7 @@ class ComplexFraction(Number):
         
         elif (printable_num.real == 0):
 
-            return f"{printable_num.imag}*1j"
+            return f"{printable_num.imag}j"
         
         elif (printable_num.imag == 0):
 
