@@ -7,12 +7,12 @@ from fractions import Fraction
 @pytest.fixture
 def real_num() -> ComplexFraction:
 
-    return ComplexFraction('2.5', 0)
+    return ComplexFraction('2.5', "0")
 
 @pytest.fixture
 def imag_num() -> ComplexFraction:
 
-    return ComplexFraction(0, '-1/2')
+    return ComplexFraction("0", '-1/2')
 
 @pytest.fixture
 def complex_num() -> ComplexFraction:
@@ -85,3 +85,47 @@ def test_mag_sq(complex_num):
 def test_recip(complex_num):
 
     assert complex_num.recip() == ComplexFraction('1/3', '1/4')/(Fraction('1/9') + Fraction('1/16'))
+
+###  split_complex_str tests  ###
+
+def test_real_str_1():
+
+    assert ComplexFraction.split_complex_str("1.1") == ("1.1", "0")
+
+def test_real_str_2():
+
+    assert ComplexFraction.split_complex_str("-1/3") == ("-1/3", "0")
+
+def test_imag_str_1():
+
+    assert ComplexFraction.split_complex_str("1.1j") == ("0", "1.1")
+
+def test_imag_str_2():
+
+    assert ComplexFraction.split_complex_str("-11/10j") == ("0", "-11/10")
+
+def test_complex_str_1():
+
+    assert ComplexFraction.split_complex_str("1+1j") == ("1", "1")
+
+def test_complex_str_2():
+
+    assert ComplexFraction.split_complex_str("1/3+1j") == ("1/3", "1")
+
+def test_complex_str_3():
+
+    assert ComplexFraction.split_complex_str("-1/3+1j") == ("-1/3", "1")
+
+def test_complex_str_4():
+
+    assert ComplexFraction.split_complex_str("-1.1-2.1j") == ("-1.1", "-2.1")
+
+def test_complex_str_5():
+
+    assert ComplexFraction.split_complex_str("-1.1j-2.1") == ("-2.1", "-1.1")
+
+def test_complex_str_6():
+
+    assert ComplexFraction.split_complex_str("-11/10j+2.1") == ("2.1", "-11/10")
+
+###  end split_complex_str tests  ###

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ComplexFraction"
-version = "0.1.0"
+version = "1.0.0"
 description = "Implements class supporting complex arithmetic with real and imag being Fractions"
 authors = ["Moussa Mikhail <moussamikhail56@gmail.com>"]
 license = "MIT"

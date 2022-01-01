@@ -2,29 +2,157 @@ from __future__ import annotations
 
 from fractions import Fraction
 from numbers import Complex, Number, Real
+from typing import Tuple, Union
 
 
 class ComplexFraction(Number):
+    """This class implements complex numbers with components being Fractions. 
 
-    def __init__(self, *args):
-        
+    In the 1 argument constructor a complex number or a string of a complex number is acceptable.\n
+
+    The 2 argument constructor accepts 2 real numbers, 2 strings, or a combination of the 2.\n
+
+    Note that 1/3j is interpreted by python as 1/(3j) == -0.333...j but is interpreted by the constructor as 1/3*1j
+
+
+    """
+
+    __slots__ = ('_real', '_imag')
+
+    def __new__(cls, *args) -> ComplexFraction:
+
+        self = super(ComplexFraction, cls).__new__(cls)
+
         if (len(args) == 1):
 
-            z: Complex = args[0]
+            z = args[0]
+            
+            if (isinstance(z, Complex)):
 
-            self.real: Fraction = Fraction(z.real)
+                self.from_complex(z)
 
-            self.imag: Fraction = Fraction(z.imag)
+                return self
+            
+            elif (isinstance(z, str)):
+
+                self.from_complex_str(z)
+
+                return self
         
         elif (len(args) == 2):
 
-            real: Real = args[0]
+            real: Union[str, Real] = args[0]
 
-            imag: Real = args[1]
+            imag: Union[str, Real] = args[1]
 
-            self.real: Fraction = Fraction(real)
+            self.from_components(real, imag)     
 
-            self.imag: Fraction = Fraction(imag)
+            return self   
+        				
+
+    def from_complex(self, z: Complex):
+
+        self._real: Fraction = Fraction(z.real)
+
+        self._imag: Fraction = Fraction(z.imag)
+    
+    @staticmethod
+    def split_complex_str(z_str: str) -> Tuple[str, str]:
+
+        """Takes a string representing a complex number \n
+        and returns a tuple of strings which are \n
+        representations of the real and imaginary parts.
+
+        Examples
+        --------
+
+        split_complex_str("1.1") = ("1.1", "0")
+
+        split_complex_str("1.1j") = ("0", "1.1")
+
+        split_complex_str("1/3*1j") = ("0", "1/3")
+
+        split_complex_str("1+1j") = ("1", "1")
+
+        split_complex_str("1/3+1.2j") = ("1/3", "1.2")
+
+        split_complex_str("1.2j+1/3") = ("1/3", "1.2")
+
+        split_complex_str("1.2-1/3*1j") = ("1.2", "-1/3")
+
+        split_complex_str("-1/3*1j+1.2") = ("1.2", "-1/3")
+
+        """
+
+        real_str: str = ''
+
+        imag_str: str = ''
+
+        if 'j' in z_str:
+
+            curr_pos: int = z_str.find('j') 
+
+            curr_char: str = z_str[curr_pos]
+
+            imag_str = 'j'
+
+            while (curr_pos > 0 and curr_char not in {'+', '-'}):
+
+                curr_pos -= 1
+
+                curr_char = z_str[curr_pos]
+
+                imag_str = curr_char + imag_str
+        
+            real_str = z_str.replace(imag_str, '')
+
+            real_str = real_str.replace('+', '')
+
+            imag_str = imag_str.replace("*1j", '')
+
+            imag_str = imag_str.replace('j', '')
+
+            imag_str = imag_str.replace('+', '')
+
+            if real_str == '':
+
+                real_str = '0'
+        
+        else: 
+
+            real_str = z_str
+
+            real_str = real_str.replace('+', '')
+
+            imag_str = '0'
+
+        return real_str, imag_str
+    
+    def from_complex_str(self, z_str: str):
+
+        real: str
+
+        imag: str
+
+        real, imag = ComplexFraction.split_complex_str(z_str)
+
+        self.from_components(real, imag)
+    
+    def from_components(self, real: Union[str, Real], imag: Union[str, Real]):
+        
+        self._real: Fraction = Fraction(real)
+
+        self._imag: Fraction = Fraction(imag)
+    
+    @property
+    def real(z: ComplexFraction) -> Fraction:
+
+        return z._real
+    
+    @property
+    def imag(z: ComplexFraction) -> Fraction:
+
+        return z._imag
 
     def __repr__(self) -> str:
 
