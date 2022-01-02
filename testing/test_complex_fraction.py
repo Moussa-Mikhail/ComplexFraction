@@ -44,11 +44,11 @@ def test_str_real(real_num):
 
 def test_str_imag(imag_num):
 
-    assert imag_num.__str__() == "-1/2*1j"
+    assert imag_num.__str__() == "-1/2j"
 
 def test_str(complex_num):
 
-    assert complex_num.__str__() == "1/3-1/4*1j"
+    assert complex_num.__str__() == "1/3-1/4j"
 
 def test_eq(complex_num):
 

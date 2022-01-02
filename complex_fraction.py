@@ -4,8 +4,10 @@ from fractions import Fraction
 from numbers import Complex, Number, Real
 from typing import Tuple, Union
 
+from math import sqrt
 
-class ComplexFraction(Complex):
+
+class ComplexFraction(Number):
     """This class implements complex numbers with components being Fractions. 
 
     In the 1 argument constructor a complex number or a string of a complex number is acceptable.\n
@@ -28,7 +30,7 @@ class ComplexFraction(Complex):
 
             z = args[0]
             
-            if (isinstance(z, Complex)):
+            if (isinstance(z, Number)):
 
                 self.from_complex(z)
 
