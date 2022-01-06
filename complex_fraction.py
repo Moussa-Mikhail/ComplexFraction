@@ -4,8 +4,6 @@ from fractions import Fraction
 from numbers import Complex, Number, Real
 from typing import Tuple, Union
 
-from math import sqrt
-
 
 class ComplexFraction(Number):
     """This class implements complex numbers with components being Fractions. 
@@ -15,7 +13,7 @@ class ComplexFraction(Number):
     The 2 argument constructor accepts 2 real numbers, 2 strings, or a combination.\n
 
     Note that 1/3j is interpreted by python as 1/(3j) == -0.333...j\n
-    but for the purposes of this class "1/3j" is equivalent to "(1/3)j."
+    but for the purposes of this class "1/3j" is equivalent to (1/3)j.
 
 
     """
@@ -28,9 +26,9 @@ class ComplexFraction(Number):
 
         if (len(args) == 1):
 
-            z = args[0]
+            z: Union[Complex, str] = args[0]
             
-            if (isinstance(z, Number)):
+            if (isinstance(z, Complex)):
 
                 self.from_complex(z)
 
@@ -50,8 +48,7 @@ class ComplexFraction(Number):
 
             self.from_components(real, imag)     
 
-            return self   
-        				
+            return self    				
 
     def from_complex(self, z: Complex):
 
@@ -133,13 +130,13 @@ class ComplexFraction(Number):
     
     def from_complex_str(self, z_str: str):
 
-        real: str
+        real_str: str
 
-        imag: str
+        imag_str: str
 
-        real, imag = ComplexFraction.split_complex_str(z_str)
+        real_str, imag_str = ComplexFraction.split_complex_str(z_str)
 
-        self.from_components(real, imag)
+        self.from_components(real_str, imag_str)
     
     def from_components(self, real: Union[str, Real], imag: Union[str, Real]):
         
@@ -201,75 +198,111 @@ class ComplexFraction(Number):
     
     def __add__(self, rhs: Number) -> ComplexFraction:
 
-        if not isinstance(rhs, ComplexFraction):
+        if isinstance(rhs, Number):
 
-            rhs = ComplexFraction(rhs)
+            if not isinstance(rhs, ComplexFraction):
 
-        res_real = self.real + rhs.real
+                rhs = ComplexFraction(rhs)
 
-        res_imag = self.imag + rhs.imag
+            res_real = self.real + rhs.real
 
-        return ComplexFraction(res_real, res_imag)
+            res_imag = self.imag + rhs.imag
+
+            return ComplexFraction(res_real, res_imag)
+        
+        else:
+
+            return NotImplemented        
     
-    def __radd__(self, lhs: Number) -> ComplexFraction:
-
-        if not isinstance(lhs, ComplexFraction):
-
-            lhs = ComplexFraction(lhs)
-
-        res_real = self.real + lhs.real
-
-        res_imag = self.imag + lhs.imag
-
-        return ComplexFraction(res_real, res_imag)
+    def __radd__(self, lhs) -> ComplexFraction:
     
-    def __sub__(self, rhs: Number) -> ComplexFraction:
+        if isinstance(lhs, Number):
 
-        if not isinstance(rhs, ComplexFraction):
+            if not isinstance(lhs, ComplexFraction):
 
-            rhs = ComplexFraction(rhs)
+                lhs = ComplexFraction(lhs)
 
-        res_real = self.real - rhs.real
+            res_real = self.real + lhs.real
 
-        res_imag = self.imag - rhs.imag
+            res_imag = self.imag + lhs.imag
 
-        return ComplexFraction(res_real, res_imag)
+            return ComplexFraction(res_real, res_imag)
+        
+        else:
+
+            return NotImplemented        
     
-    def __rsub__(self, lhs: Number) -> ComplexFraction:
+    def __sub__(self, rhs) -> ComplexFraction:
 
-        if not isinstance(lhs, ComplexFraction):
+        if isinstance(rhs, Number):
 
-            lhs = ComplexFraction(lhs)
+            if not isinstance(rhs, ComplexFraction):
 
-        res_real = -self.real + lhs.real
+                rhs = ComplexFraction(rhs)
 
-        res_imag = -self.imag + lhs.imag
+            res_real = self.real - rhs.real
 
-        return ComplexFraction(res_real, res_imag)
+            res_imag = self.imag - rhs.imag
+
+            return ComplexFraction(res_real, res_imag)
+        
+        else:
+
+            return NotImplemented 
     
-    def __mul__(self, rhs: Number) -> ComplexFraction:
+    def __rsub__(self, lhs) -> ComplexFraction:
 
-        if not isinstance(rhs, ComplexFraction):
+        if isinstance(lhs, Number):
 
-            rhs = ComplexFraction(rhs)
+            if not isinstance(lhs, ComplexFraction):
 
-        res_real = self.real*rhs.real - self.imag*rhs.imag
+                lhs = ComplexFraction(lhs)
 
-        res_imag = self.real*rhs.imag + self.imag*rhs.real
+            res_real = -self.real + lhs.real
 
-        return ComplexFraction(res_real, res_imag)
+            res_imag = -self.imag + lhs.imag
+
+            return ComplexFraction(res_real, res_imag)
+        
+        else:
+
+            return NotImplemented
     
-    def __rmul__(self, lhs: Number) -> ComplexFraction:
+    def __mul__(self, rhs) -> ComplexFraction:
 
-        if not isinstance(lhs, ComplexFraction):
+        if isinstance(rhs, Number):
 
-            lhs = ComplexFraction(lhs)
+            if not isinstance(rhs, ComplexFraction):
 
-        res_real = self.real*lhs.real - self.imag*lhs.imag
+                rhs = ComplexFraction(rhs)
 
-        res_imag = self.real*lhs.imag + self.imag*lhs.real
+            res_real = self.real*rhs.real - self.imag*rhs.imag
 
-        return ComplexFraction(res_real, res_imag)
+            res_imag = self.real*rhs.imag + self.imag*rhs.real
+
+            return ComplexFraction(res_real, res_imag)
+        
+        else:
+
+            return NotImplemented  
+    
+    def __rmul__(self, lhs) -> ComplexFraction:
+
+        if isinstance(lhs, Number):
+
+            if not isinstance(lhs, ComplexFraction):
+
+                lhs = ComplexFraction(lhs)
+
+            res_real = self.real*lhs.real - self.imag*lhs.imag
+
+            res_imag = self.real*lhs.imag + self.imag*lhs.real
+
+            return ComplexFraction(res_real, res_imag)
+        
+        else:
+
+            return NotImplemented
 
     def conjugate(self: ComplexFraction) -> ComplexFraction:
 
