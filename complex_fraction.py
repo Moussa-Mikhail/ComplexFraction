@@ -186,7 +186,13 @@ class ComplexFraction(Number):
             
     def __eq__(self, rhs: Number) -> bool:
 
-        return self.real == rhs.real and self.imag == rhs.imag    
+        if isinstance(rhs, Number):
+
+            return self.real == rhs.real and self.imag == rhs.imag    
+
+        elif isinstance(rhs, str):
+
+            return self == ComplexFraction(rhs)
 
     def __neg__(self) -> ComplexFraction:
 
