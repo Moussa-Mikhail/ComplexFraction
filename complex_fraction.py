@@ -28,7 +28,7 @@ class ComplexFraction(Number):
 
             z: Union[Complex, str] = args[0]
             
-            if (isinstance(z, Complex)):
+            if (isinstance(z, Number)):
 
                 self.from_complex(z)
 
