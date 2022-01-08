@@ -86,6 +86,14 @@ def test_recip(complex_num):
 
     assert complex_num.recip() == ComplexFraction('1/3', '1/4')/(Fraction('1/9') + Fraction('1/16'))
 
+def test_pow_pos_int(complex_num):
+
+    assert complex_num**2 == complex_num*complex_num
+
+def test_pow_neg_int(complex_num):
+
+    assert complex_num**-2 == 1/(complex_num*complex_num)
+
 ###  split_complex_str tests  ###
 
 def test_real_str_1():
