@@ -1,8 +1,8 @@
-import pytest
-
-from complex_fraction import ComplexFraction
-
+# pylint: disable=redefined-outer-name, missing-docstring
 from fractions import Fraction
+
+import pytest
+from complex_fraction import ComplexFraction
 
 
 @pytest.fixture
@@ -121,7 +121,7 @@ def test_pow_neg_int(complex_num):
     assert complex_num**-2 == 1 / (complex_num * complex_num)
 
 
-###  split_complex_str tests  ###
+#  split_complex_str tests  #
 
 
 def test_real_str_1():
@@ -174,4 +174,4 @@ def test_complex_str_6():
     assert ComplexFraction.split_complex_str("-11/10j+2.1") == ("2.1", "-11/10")
 
 
-###  end split_complex_str tests  ###
+#  end split_complex_str tests  #

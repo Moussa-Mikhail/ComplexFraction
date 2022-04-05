@@ -1,15 +1,19 @@
+"""
+This module implements complex numbers with components being Fractions.
+"""
 from __future__ import annotations
+from decimal import Decimal
 
 from fractions import Fraction
 from math import sqrt
-from numbers import Complex, Number, Real
-from typing import Tuple, Union
+from numbers import Complex, Number
 
 
 class ComplexFraction(Complex):
     """This class implements complex numbers with components being Fractions.
 
-    In the 1 argument constructor a complex number or a string of a complex number is acceptable.
+    In the 1 argument constructor a complex number or a string representation
+    of a complex number is acceptable.
 
     The 2 argument constructor accepts 2 real numbers, 2 strings, or a combination.
 
@@ -17,49 +21,40 @@ class ComplexFraction(Complex):
     but for the purposes of this class "1/3j" is equivalent to (1/3)j.
     """
 
-    __slots__ = ("_real", "_imag")
+    __hash__ = None  # type: ignore
 
-    def __new__(cls, *args) -> ComplexFraction:
-
-        self = super(ComplexFraction, cls).__new__(cls)
+    def __init__(self, *args):
 
         if len(args) == 1:
 
-            z = args[0]
+            z = args[0]  # pylint: disable=invalid-name
 
             if isinstance(z, Complex):
 
-                self.from_complex(z)
-
-                return self
+                self._from_components(z.real, z.imag)
 
             elif isinstance(z, str):
 
-                self.from_complex_str(z)
-
-                return self
+                self._from_complex_str(z)
 
             else:
                 raise TypeError(f"Expected {z} to be string or complex")
 
         elif len(args) == 2:
 
-            real: Union[str, Real] = args[0]
+            real: float | Decimal | str = args[0]
 
-            imag: Union[str, Real] = args[1]
+            imag: float | Decimal | str = args[1]
 
-            self.from_components(real, imag)
+            self._from_components(real, imag)
 
-            return self
-
-    def from_complex(self, z: Complex):
-
-        self._real: Fraction = Fraction(z.real)
-
-        self._imag: Fraction = Fraction(z.imag)
+        else:
+            raise TypeError(
+                f"ComplexFraction expected at most 2 arguments, got {len(args)}"
+            )
 
     @staticmethod
-    def split_complex_str(z_str: str) -> Tuple[str, str]:
+    def split_complex_str(z_str: str) -> tuple[str, str]:
 
         """Takes a string representing a complex number \n
         and returns a tuple of strings which are \n
@@ -86,15 +81,15 @@ class ComplexFraction(Complex):
 
         """
 
-        real_str: str = ""
+        real_str = ""
 
-        imag_str: str = ""
+        imag_str = ""
 
         if "j" in z_str:
 
-            curr_pos: int = z_str.find("j")
+            curr_pos = z_str.find("j")
 
-            curr_char: str = z_str[curr_pos]
+            curr_char = z_str[curr_pos]
 
             imag_str = "j"
 
@@ -116,7 +111,7 @@ class ComplexFraction(Complex):
 
             imag_str = imag_str.replace("+", "")
 
-            if real_str == "":
+            if not real_str:
 
                 real_str = "0"
 
@@ -130,31 +125,29 @@ class ComplexFraction(Complex):
 
         return real_str, imag_str
 
-    def from_complex_str(self, z_str: str):
-
-        real_str: str
-
-        imag_str: str
+    def _from_complex_str(self, z_str: str):
 
         real_str, imag_str = ComplexFraction.split_complex_str(z_str)
 
-        self.from_components(real_str, imag_str)
+        self._from_components(real_str, imag_str)
 
-    def from_components(self, real: Union[str, Real], imag: Union[str, Real]):
+    def _from_components(
+        self, real: float | Decimal | str, imag: float | Decimal | str
+    ):
 
-        self._real: Fraction = Fraction(real)
+        self._real = Fraction(real)
 
-        self._imag: Fraction = Fraction(imag)
-
-    @property
-    def real(z: ComplexFraction) -> Fraction:
-
-        return z._real
+        self._imag = Fraction(imag)
 
     @property
-    def imag(z: ComplexFraction) -> Fraction:
+    def real(self: ComplexFraction) -> Fraction:
 
-        return z._imag
+        return self._real
+
+    @property
+    def imag(self: ComplexFraction) -> Fraction:
+
+        return self._imag
 
     def __repr__(self) -> str:
 
@@ -186,15 +179,18 @@ class ComplexFraction(Complex):
 
                 return f"{printable_num.real}-{-printable_num.imag}j"
 
-    def __eq__(self, rhs: Number) -> bool:
+    def __eq__(self, rhs) -> bool:
 
-        if isinstance(rhs, Number):
+        if isinstance(rhs, Complex):
 
             return self.real == rhs.real and self.imag == rhs.imag
 
         elif isinstance(rhs, str):
 
             return self == ComplexFraction(rhs)
+
+        else:
+            return NotImplemented
 
     def __neg__(self) -> ComplexFraction:
 
@@ -293,18 +289,20 @@ class ComplexFraction(Complex):
         return ComplexFraction(res_real, res_imag)
 
     def magnitude_squared(self) -> Fraction:
+        """Returns the magnitude squared of the complex number."""
 
         return self.real**2 + self.imag**2
 
-    def __abs__(self) -> float:
+    def __abs__(self) -> float:  # type: ignore
 
         return sqrt(self.magnitude_squared())
 
     def reciprocal(self) -> ComplexFraction:
+        """Returns the reciprocal of the complex number."""
 
         return self.conjugate() / self.magnitude_squared()
 
-    def __truediv__(self, rhs: Number) -> ComplexFraction:
+    def __truediv__(self, rhs: Complex) -> ComplexFraction:
 
         return self * (1 / rhs)
 
@@ -313,6 +311,8 @@ class ComplexFraction(Complex):
         return lhs * self.reciprocal()
 
     def limit_denominator(self, max_denominator=1000000) -> ComplexFraction:
+        """Returns a new ComplexFraction that has had the denominators
+        of it components limited to the given value."""
 
         new_real: Fraction = self.real.limit_denominator(max_denominator)
 
@@ -320,7 +320,7 @@ class ComplexFraction(Complex):
 
         return ComplexFraction(new_real, new_imag)
 
-    def __complex__(self) -> Complex:
+    def __complex__(self) -> complex:
 
         real: float = float(self.real)
 
@@ -330,7 +330,7 @@ class ComplexFraction(Complex):
 
     def __pow__(self, power: Complex) -> ComplexFraction:
 
-        if not (isinstance(power, int)):
+        if not isinstance(power, int):
             return ComplexFraction(complex(self) ** power)
 
         res: ComplexFraction = ComplexFraction(1, 0)
