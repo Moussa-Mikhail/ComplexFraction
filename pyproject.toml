@@ -6,6 +6,7 @@ authors = ["Moussa Mikhail <moussamikhail56@gmail.com>"]
 license = "MIT"
 packages = [
 	{ include = "complex_fraction"},
+	{ include = "complex_fraction/py.typed"},
 ]
 
 [tool.poetry.dependencies]
