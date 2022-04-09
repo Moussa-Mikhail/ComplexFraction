@@ -1,11 +1,11 @@
 [tool.poetry]
-name = "ComplexFraction"
+name = "complex_fraction"
 version = "1.0.9"
-description = "Implements class supporting complex arithmetic with real and imag being Fractions"
+description = "Implements a class supporting complex arithmetic with real and imag being Fractions"
 authors = ["Moussa Mikhail <moussamikhail56@gmail.com>"]
 license = "MIT"
 packages = [
-	{ include = "complex_fraction.py"},
+	{ include = "complex_fraction"},
 ]
 
 [tool.poetry.dependencies]
