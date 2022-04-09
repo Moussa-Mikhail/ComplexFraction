@@ -1,5 +1,5 @@
 # complex_fraction
-Implements a ComplexFraction class whose real and imag attributes are Fractions.  
+Implements a class that subclasses Complex whose real and imag attributes are Fractions.  
 It supports constructing an instance by  
 - passing 1 argument: a complex number or a string representing a complex number.  
 - passing 2 arguments: the real and imag components which can be 2 Fraction-able types, 2 strings or a combination.
