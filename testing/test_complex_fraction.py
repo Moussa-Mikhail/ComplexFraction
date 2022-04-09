@@ -75,6 +75,23 @@ def test_add(real_num, imag_num):
     assert real_num + imag_num == ComplexFraction("5/2", "-1/2")
 
 
+def test_add_str(complex_num):
+    # sourcery skip: use-fstring-for-concatenation
+
+    assert complex_num + "1/3+1/4j" == ComplexFraction("2/3", "0")
+
+
+def test_radd(complex_num):
+
+    assert (1 + 1j) + complex_num == ComplexFraction("4/3", "3/4")
+
+
+def test_radd_str(complex_num):
+    # sourcery skip: use-fstring-for-concatenation
+
+    assert "1/3+1/4j" + complex_num == ComplexFraction("2/3", "0")
+
+
 def test_sub(complex_num, real_num):
 
     assert complex_num - real_num == ComplexFraction("1/3", "-1/4") - ComplexFraction(
@@ -82,16 +99,59 @@ def test_sub(complex_num, real_num):
     )
 
 
+def test_sub_str(complex_num):
+
+    assert complex_num - "1/6" == ComplexFraction("1/6", "-1/4")
+
+
+def test_rsub(complex_num):
+
+    assert 1 / 2 - complex_num == ComplexFraction("1/6", "1/4")
+
+
+def test_rsub_str(complex_num):
+
+    assert "1/6" - complex_num == ComplexFraction("-1/6", "1/4")
+
+
 def test_mul(complex_num):
 
-    assert complex_num * ComplexFraction(1, 1) == ComplexFraction(
-        "1/3", "-1/4"
-    ) + ComplexFraction("1/4", "1/3")
+    assert complex_num * (1 / 2 + 1j) == ComplexFraction("10/24", "5/24")
 
 
-def test_truediv(complex_num, imag_num):
+def test_mul_str(complex_num):
 
-    assert complex_num / imag_num == ComplexFraction("1/2", "2/3")
+    assert complex_num * "1/2+1j" == ComplexFraction("10/24", "5/24")
+
+
+def test_rmul(complex_num):
+
+    assert (1 / 2 + 1j) * complex_num == ComplexFraction("10/24", "5/24")
+
+
+def test_rmul_str(complex_num):
+
+    assert "1/2+1j" * complex_num == ComplexFraction("10/24", "5/24")
+
+
+def test_truediv(complex_num):
+
+    assert complex_num / (1 + 1j) == ComplexFraction("1/24", "-7/24")
+
+
+def test_truediv_str(complex_num):
+
+    assert complex_num / "1+1j" == ComplexFraction("1/24", "-7/24")
+
+
+def test_rtruediv(complex_num):
+
+    assert (1 + 1j) / complex_num == ComplexFraction("12/25", "84/25")
+
+
+def test_rtruediv_str(complex_num):
+
+    assert "1+1j" / complex_num == ComplexFraction("12/25", "84/25")
 
 
 def test_conjugate(complex_num):
