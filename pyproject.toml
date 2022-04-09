@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "complex_fraction"
 version = "1.0.9"
-description = "Implements a class supporting complex arithmetic with real and imag being Fractions"
+description = "Implements a class that subclasses Complex whose real and imag attributes are Fractions."
 authors = ["Moussa Mikhail <moussamikhail56@gmail.com>"]
 license = "MIT"
 packages = [
