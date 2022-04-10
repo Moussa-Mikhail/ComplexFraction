@@ -2,7 +2,7 @@
 from fractions import Fraction
 
 import pytest
-from ..complex_fraction import ComplexFraction
+from ..complexfraction import ComplexFraction
 
 
 @pytest.fixture
