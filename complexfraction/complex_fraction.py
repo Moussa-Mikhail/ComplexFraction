@@ -314,7 +314,7 @@ class ComplexFraction(Complex):
 
         res = ComplexFraction(1, 0)
 
-        for _ in range(abs(power)):
+        for _ in range(abs(power)):  # type: ignore
 
             res = res * self
 
